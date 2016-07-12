@@ -1,0 +1,7 @@
+<?php
+/**
+ * @file
+ * Code for the Twitter POD feature.
+ */
+
+include_once 'twitter_pod.features.inc';

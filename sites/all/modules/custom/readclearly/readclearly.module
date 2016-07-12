@@ -1,0 +1,96 @@
+<?php
+
+/**
+ * @file
+ * ReadClearly section for DLAW settings.
+ */
+
+define('READCLEARLY_URL', 'http://writeclearly.openadvocate.org/oarc/oarc.js');
+
+/**
+ * Implements hook_menu().
+ */
+function readclearly_menu() {
+  $items['admin/dashboard/settings/glossary'] = array(
+    'title' => 'Glossary',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('readclearly_settings_form'),
+    'access arguments' => array('administer dlaw settings'),
+    'type' => MENU_LOCAL_TASK,
+    'weight' => 4.5,
+  );
+
+  return $items;
+}
+
+/**
+ * Callback for menu admin/dashboard/settings/readclearly.
+ */
+function readclearly_settings_form() {
+  $form['description'] = array(
+    '#type' => 'item',
+    '#title' => t('ReadClearly Glossary'),
+    '#markup' => '<p>OpenAdvocate ReadCleary is a free Plain Language glossary for legal services websites. Once enabled it will display plain language explanations for complex legal terms on this website. This beta edition of the glossary includes explanations for 250 legal terms. The final edition to be released in Spring 2015 will include up to 1000 terms. ' . l('Learn more.', 'http://openadvocate.org/readclearly', array('attributes' => array('target' => '_blank'))) . '</p>',
+  );
+
+  $form['enable'] = array(
+    '#type' => 'checkbox',
+    '#title' => t('Enable ReadClearly Glossary'),
+    '#default_value' => variable_get('readclearly_enable', 0),
+  );
+
+  $form['theme'] = array(
+    '#type' => 'radios',
+    '#title' => t('Theme'),
+    '#default_value' => variable_get('readclearly_theme', 'default'),
+    '#options' => array(
+      'default' => t('Default'),
+      'neutral' => t('Neutral'),
+    ),
+  );
+
+  $form['submit'] = array(
+    '#type' => 'submit',
+    '#value' => 'Save settings',
+  );
+
+  return $form;
+}
+
+/**
+ *  Submit handler for readclearly_settings_form().
+ */
+function readclearly_settings_form_submit($form, &$form_state) {
+  $values = $form_state['values'];
+
+  variable_set('readclearly_enable', $values['enable']);
+  variable_set('readclearly_theme', $values['theme']);
+}
+
+/**
+ * Implements hook_page_preprocess().
+ */
+function readclearly_preprocess_page($vars) {
+  if (arg(0) == 'node' and is_numeric(arg(1)) and !arg(2)) {
+    if (isset($vars['node'])) {
+      if ($vars['node']->type == 'page' or $vars['node']->type == 'contact') {
+        if (variable_get('readclearly_enable', 0)) {
+          drupal_add_js(READCLEARLY_URL, 'external');
+
+          $theme = variable_get('readclearly_theme', 'default');
+
+          $location = variable_get('livechat_enabled', 0) ? 'bottom-left' : 'bottom-right';
+
+          $js = "
+          (function ($) {
+            $(function() {
+              OARC.init(true, '{$location}', '{$theme}');
+            });
+          })(jQuery);";
+
+          drupal_add_js($js, array('type' => 'inline', 'scope' => 'footer'));
+        }
+      }
+    }
+  }
+}

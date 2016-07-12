@@ -1,0 +1,25 @@
+<?php
+/**
+ * @file
+ * Code for the Content Management feature.
+ */
+
+include_once 'content_management.features.inc';
+
+/**
+ * Implements hook_form_FORM_ID_alter().
+ * Alter exposed filter for Content page.
+ */
+function content_management_form_views_exposed_form_alter(&$form, $form_state, $form_id) {
+  if ($form['#id'] == 'views-exposed-form-content-manage-page') {
+    $form['uid']['#description'] = '';
+    $form['uid']['#size'] = '15';
+
+    $form['field_section_target_id_op']['#default_value'] = '0';
+    $form['field_section_target_id_op']['#options'] = array(
+      '0' => '- Any -',
+      'not empty' => 'Yes',
+      'empty' => 'No',
+    );
+  }
+}

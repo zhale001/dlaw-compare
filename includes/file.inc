@@ -475,10 +475,6 @@ function file_ensure_htaccess() {
  *   already present. Defaults to FALSE.
  */
 function file_create_htaccess($directory, $private = TRUE, $force_overwrite = FALSE) {
-  if (isset($_SERVER['PANTHEON_ENVIRONMENT'])) {
-    // Skip on Pantheon since we use nginx and this can hang.
-    return;
-  }
   if (file_uri_scheme($directory)) {
     $directory = file_stream_wrapper_uri_normalize($directory);
   }
@@ -2026,7 +2022,7 @@ function file_download() {
  *
  * @see file_transfer()
  * @see file_download_access()
- * @see hook_file_download()
+ * @see hook_file_downlaod()
  */
 function file_download_headers($uri) {
   // Let other modules provide headers and control access to the file.

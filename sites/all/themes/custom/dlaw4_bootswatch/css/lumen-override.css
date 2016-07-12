@@ -1,0 +1,15 @@
+.form-control {
+  color: #333333; }
+
+.nav-tabs > li.active > a, .nav-tabs > li.active > a:hover, .nav-tabs > li.active > a:focus {
+  color: #333333; }
+
+body {
+  color: #333333; }
+
+.field-name-field-attachments a, .field-name-field-links a {
+  text-decoration: none; }
+  .field-name-field-attachments a:hover, .field-name-field-links a:hover {
+    text-decoration: underline; }
+
+/*# sourceMappingURL=lumen-override.css.map */

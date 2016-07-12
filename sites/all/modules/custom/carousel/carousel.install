@@ -1,0 +1,13 @@
+<?php
+
+/**
+ * @file
+ * Installation functions for carousel.
+ */
+
+/**
+ * Implements hook_uninstall.
+ */
+function carousel_uninstall() {
+  variable_del('carousel_slides');
+}
